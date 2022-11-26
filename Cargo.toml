@@ -1,8 +1,12 @@
 [package]
 name = "nss-jsonfile"
 version = "0.1.0"
+authors = ["takonomura"]
 edition = "2021"
+repository = "https://github.com/takonomura/nss-jsonfile"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "nss_jsonfile"
+crate-type = ["cdylib"]
 
 [dependencies]
