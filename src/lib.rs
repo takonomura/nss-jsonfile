@@ -4,22 +4,82 @@ extern crate lazy_static;
 #[macro_use]
 extern crate libnss;
 
+use serde::Deserialize;
+use std::fs::File;
+use std::io::{ErrorKind,BufReader};
+use std::error::Error;
 use libnss::interop::Response;
 use libnss::passwd::{Passwd, PasswdHooks};
 
 struct JsonFilePasswd;
 libnss_passwd_hooks!(jsonfile, JsonFilePasswd);
 
+#[derive(Deserialize, Debug)]
+struct JsonPasswd {
+    name: String,
+    passwd: String,
+    uid: u32,
+    gid: u32,
+    gecos: String,
+    dir: String,
+    shell: String,
+}
+
+impl JsonPasswd {
+    pub fn to_nss(self) -> Passwd {
+        Passwd {
+            name: self.name,
+            passwd: self.passwd,
+            uid: self.uid,
+            gid: self.gid,
+            gecos: self.gecos,
+            dir: self.dir,
+            shell: self.shell,
+        }
+    }
+}
+
+fn load_passwd() -> Result<Vec<JsonPasswd>, Box<dyn Error>> {
+    let f = match File::open("/etc/passwd.json") {
+        Ok(f) => f,
+        Err(err) if err.kind() != ErrorKind::NotFound => return Ok(vec![]),
+        Err(err) => return Err(Box::new(err)),
+    };
+    let r = BufReader::new(f);
+    let passwd = serde_json::from_reader(r)?;
+
+    Ok(passwd)
+}
+
 impl PasswdHooks for JsonFilePasswd {
     fn get_all_entries() -> Response<Vec<Passwd>> {
-        Response::Success(vec![])
+        let v = match load_passwd() {
+            Err(_) => return Response::Unavail,
+            Ok(v) => v,
+        };
+        let r = v.into_iter().map(|u| u.to_nss()).collect();
+        Response::Success(r)
     }
 
     fn get_entry_by_uid(uid: libc::uid_t) -> Response<Passwd> {
-        Response::NotFound
+        let v = match load_passwd() {
+            Err(_) => return Response::Unavail,
+            Ok(v) => v,
+        };
+        match v.into_iter().find(|u| u.uid == uid) {
+            None => Response::NotFound,
+            Some(u) => Response::Success(u.to_nss()),
+        }
     }
 
     fn get_entry_by_name(name: String) -> Response<Passwd> {
-        Response::NotFound
+        let v = match load_passwd() {
+            Err(_) => return Response::Unavail,
+            Ok(v) => v,
+        };
+        match v.into_iter().find(|u| u.name == name) {
+            None => Response::NotFound,
+            Some(u) => Response::Success(u.to_nss()),
+        }
     }
 }
