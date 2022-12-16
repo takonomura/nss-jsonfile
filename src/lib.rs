@@ -15,10 +15,10 @@ use libnss::group::{Group, GroupHooks};
 #[derive(Deserialize, Debug)]
 struct JsonPasswd {
     name: String,
-    passwd: String,
+    passwd: Option<String>,
     uid: u32,
     gid: u32,
-    gecos: String,
+    gecos: Option<String>,
     dir: String,
     shell: String,
 }
@@ -27,10 +27,10 @@ impl JsonPasswd {
     pub fn to_nss(self) -> Passwd {
         Passwd {
             name: self.name,
-            passwd: self.passwd,
+            passwd: self.passwd.unwrap_or("*".to_string()),
             uid: self.uid,
             gid: self.gid,
-            gecos: self.gecos,
+            gecos: self.gecos.unwrap_or_default(),
             dir: self.dir,
             shell: self.shell,
         }
@@ -52,7 +52,7 @@ fn load_passwd() -> Result<Vec<JsonPasswd>, Box<dyn Error>> {
 #[derive(Deserialize, Debug)]
 struct JsonGroup {
     name: String,
-    passwd: String,
+    passwd: Option<String>,
     gid: u32,
     members: Vec<String>,
 }
@@ -61,7 +61,7 @@ impl JsonGroup {
     pub fn to_nss(self) -> Group {
         Group {
             name: self.name,
-            passwd: self.passwd,
+            passwd: self.passwd.unwrap_or("*".to_string()),
             gid: self.gid,
             members: self.members,
         }
