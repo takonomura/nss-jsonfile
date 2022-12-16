@@ -17,7 +17,7 @@ struct JsonPasswd {
     name: String,
     passwd: Option<String>,
     uid: u32,
-    gid: u32,
+    gid: Option<u32>,
     gecos: Option<String>,
     dir: String,
     shell: String,
@@ -29,7 +29,7 @@ impl JsonPasswd {
             name: self.name,
             passwd: self.passwd.unwrap_or("*".to_string()),
             uid: self.uid,
-            gid: self.gid,
+            gid: self.gid.unwrap_or(self.uid),
             gecos: self.gecos.unwrap_or_default(),
             dir: self.dir,
             shell: self.shell,
@@ -69,13 +69,20 @@ impl JsonGroup {
 }
 
 fn load_groups() -> Result<Vec<JsonGroup>, Box<dyn Error>> {
-    let f = match File::open("/etc/group.json") {
-        Ok(f) => f,
-        Err(err) if err.kind() != ErrorKind::NotFound => return Ok(vec![]),
+    let mut groups: Vec<JsonGroup> = match File::open("/etc/group.json") {
+        Ok(f) => serde_json::from_reader(BufReader::new(f))?,
+        Err(err) if err.kind() != ErrorKind::NotFound => vec![],
         Err(err) => return Err(Box::new(err)),
     };
-    let r = BufReader::new(f);
-    let groups = serde_json::from_reader(r)?;
+
+    groups.extend(load_passwd()?.into_iter()
+        .filter(|u| u.gid.is_none())
+        .map(|u| JsonGroup{
+            name: u.name.clone(),
+            passwd: None,
+            gid: u.uid,
+            members: vec![u.name],
+        }));
 
     Ok(groups)
 }
