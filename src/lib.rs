@@ -11,6 +11,7 @@ use std::error::Error;
 use libnss::interop::Response;
 use libnss::passwd::{Passwd, PasswdHooks};
 use libnss::group::{Group, GroupHooks};
+use libnss::initgroups::InitgroupsHooks;
 
 #[derive(Deserialize, Debug)]
 struct JsonPasswd {
@@ -21,6 +22,7 @@ struct JsonPasswd {
     gecos: Option<String>,
     dir: String,
     shell: String,
+    groups: Option<Vec<u32>>,
 }
 
 impl JsonPasswd {
@@ -156,5 +158,31 @@ impl GroupHooks for JsonFileGroup {
             None => Response::NotFound,
             Some(g) => Response::Success(g.to_nss()),
         }
+    }
+}
+struct JsonFileInitgroups;
+libnss_initgroups_hooks!(jsonfile, JsonFileInitgroups);
+
+impl InitgroupsHooks for JsonFileInitgroups {
+    fn get_entries_by_user(name: String) -> Response<Vec<Group>> {
+        let passwd = match load_passwd() {
+            Err(_) => return Response::Unavail,
+            Ok(v) => v,
+        };
+        let u = match passwd.into_iter().find(|u| u.name == name) {
+            None => return Response::Success(vec![]),
+            Some(u) => u,
+        };
+        let groups = u.groups.unwrap_or_default().into_iter()
+            .map(|gid| Group{
+                gid: gid,
+                // Following fields is not used in initgroups
+                name: "".to_string(),
+                passwd: "".to_string(),
+                members: vec![],
+            })
+            .collect();
+
+        Response::Success(groups)
     }
 }
