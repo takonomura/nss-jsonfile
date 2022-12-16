@@ -40,7 +40,7 @@ impl JsonPasswd {
 fn load_passwd() -> Result<Vec<JsonPasswd>, Box<dyn Error>> {
     let f = match File::open("/etc/passwd.json") {
         Ok(f) => f,
-        Err(err) if err.kind() != ErrorKind::NotFound => return Ok(vec![]),
+        Err(err) if err.kind() == ErrorKind::NotFound => return Ok(vec![]),
         Err(err) => return Err(Box::new(err)),
     };
     let r = BufReader::new(f);
@@ -71,7 +71,7 @@ impl JsonGroup {
 fn load_groups() -> Result<Vec<JsonGroup>, Box<dyn Error>> {
     let mut groups: Vec<JsonGroup> = match File::open("/etc/group.json") {
         Ok(f) => serde_json::from_reader(BufReader::new(f))?,
-        Err(err) if err.kind() != ErrorKind::NotFound => vec![],
+        Err(err) if err.kind() == ErrorKind::NotFound => vec![],
         Err(err) => return Err(Box::new(err)),
     };
 
