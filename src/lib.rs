@@ -4,14 +4,14 @@ extern crate lazy_static;
 #[macro_use]
 extern crate libnss;
 
-use serde::Deserialize;
-use std::fs::File;
-use std::io::{ErrorKind,BufReader};
-use std::error::Error;
-use libnss::interop::Response;
-use libnss::passwd::{Passwd, PasswdHooks};
 use libnss::group::{Group, GroupHooks};
 use libnss::initgroups::InitgroupsHooks;
+use libnss::interop::Response;
+use libnss::passwd::{Passwd, PasswdHooks};
+use serde::Deserialize;
+use std::error::Error;
+use std::fs::File;
+use std::io::{BufReader, ErrorKind};
 
 #[derive(Deserialize, Debug)]
 struct JsonPasswd {
@@ -77,14 +77,17 @@ fn load_groups() -> Result<Vec<JsonGroup>, Box<dyn Error>> {
         Err(err) => return Err(Box::new(err)),
     };
 
-    groups.extend(load_passwd()?.into_iter()
-        .filter(|u| u.gid.is_none())
-        .map(|u| JsonGroup{
-            name: u.name.clone(),
-            passwd: None,
-            gid: u.uid,
-            members: vec![u.name],
-        }));
+    groups.extend(
+        load_passwd()?
+            .into_iter()
+            .filter(|u| u.gid.is_none())
+            .map(|u| JsonGroup {
+                name: u.name.clone(),
+                passwd: None,
+                gid: u.uid,
+                members: vec![u.name],
+            }),
+    );
 
     Ok(groups)
 }
@@ -173,8 +176,11 @@ impl InitgroupsHooks for JsonFileInitgroups {
             None => return Response::Success(vec![]),
             Some(u) => u,
         };
-        let groups = u.groups.unwrap_or_default().into_iter()
-            .map(|gid| Group{
+        let groups = u
+            .groups
+            .unwrap_or_default()
+            .into_iter()
+            .map(|gid| Group {
                 gid: gid,
                 // Following fields is not used in initgroups
                 name: "".to_string(),
