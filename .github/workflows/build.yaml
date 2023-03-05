@@ -23,11 +23,11 @@ jobs:
 
       - name: Install cargo-zigbuild
         run: |
-          curl -sSLO https://github.com/rust-cross/cargo-zigbuild/releases/download/v0.16.0/cargo-zigbuild-v0.16.0.x86_64-unknown-linux-musl.tar.gz
-          echo 'bc13a2f80473d77a41e560567e3b423e6141d9a59ae00d613abb160ba7d8f4b1 cargo-zigbuild-v0.16.0.x86_64-unknown-linux-musl.tar.gz' | sha256sum -c -
-          tar xf cargo-zigbuild-v0.16.0.x86_64-unknown-linux-musl.tar.gz cargo-zigbuild
+          CARGO_ZIGBUILD_VERSION=v0.16.0
+          curl -sSLO "https://github.com/rust-cross/cargo-zigbuild/releases/download/${CARGO_ZIGBUILD_VERSION}/cargo-zigbuild-${CARGO_ZIGBUILD_VERSION}.x86_64-unknown-linux-musl.tar.gz"
+          tar xf "cargo-zigbuild-${CARGO_ZIGBUILD_VERSION}.x86_64-unknown-linux-musl.tar.gz" cargo-zigbuild
           mv cargo-zigbuild /usr/local/bin/
-          rm cargo-zigbuild-v0.16.0.x86_64-unknown-linux-musl.tar.gz
+          rm "cargo-zigbuild-${CARGO_ZIGBUILD_VERSION}.x86_64-unknown-linux-musl.tar.gz"
 
       - name: Build
         uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # renovate: tag=v1.0.3
