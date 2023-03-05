@@ -21,6 +21,15 @@
       "datasourceTemplate": "github-tags",
       "lookupNameTemplate": "ziglang/zig",
       "depNameTemplate": "zig"
+    },
+    {
+      "fileMatch": ["^.github/workflows/build.yaml$"],
+      "matchStrings": [
+        "CARGO_ZIGBUILD_VERSION=(?<currentValue>v[0-9.]+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "lookupNameTemplate": "rust-cross/cargo-zigbuild",
+      "depNameTemplate": "cargo-zigbuild"
     }
   ]
 }
