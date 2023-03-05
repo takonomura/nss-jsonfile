@@ -15,8 +15,6 @@ jobs:
 
       - name: Setup Rust
         uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
-        with:
-          toolchain: 1.67.1
 
       - name: Setup Zig
         uses: goto-bus-stop/setup-zig@869a4299cf8ac7db4ebffaec36ad82a682f88acb # renovate: tag=v2.0.1
