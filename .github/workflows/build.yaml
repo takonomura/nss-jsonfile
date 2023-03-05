@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+    tags:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # 3.3.0
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@b2417cde72dcf67f306c0ae8e0828a81bf0b189f # 1.0.6
+        with:
+          toolchain: 1.67.1
+
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@869a4299cf8ac7db4ebffaec36ad82a682f88acb # 2.0.1
+        with:
+          version: 0.10.1
+
+      - name: Install cargo-zigbuild
+        run: |
+          curl -sSLO https://github.com/rust-cross/cargo-zigbuild/releases/download/v0.16.0/cargo-zigbuild-v0.16.0.x86_64-unknown-linux-musl.tar.gz
+          echo 'bc13a2f80473d77a41e560567e3b423e6141d9a59ae00d613abb160ba7d8f4b1 cargo-zigbuild-v0.16.0.x86_64-unknown-linux-musl.tar.gz' | sha256sum -c -
+          tar xf cargo-zigbuild-v0.16.0.x86_64-unknown-linux-musl.tar.gz cargo-zigbuild
+          mv cargo-zigbuild /usr/local/bin/
+          rm cargo-zigbuild-v0.16.0.x86_64-unknown-linux-musl.tar.gz
+
+      - name: Build
+        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # 1.0.3
+        with:
+          command: zigbuild
+          args: --target x86_64-unknown-linux-gnu.2.17 --release
+
+      - name: Upload binary artifacts
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # 3.1.2
+        with:
+          path: target/x86_64-unknown-linux-gnu/release/libnss_jsonfile.so
+          if-no-files-found: error
+
+      - name: Release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # 0.1.15
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: target/x86_64-unknown-linux-gnu/release/libnss_jsonfile.so
