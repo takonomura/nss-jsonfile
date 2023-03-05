@@ -12,6 +12,15 @@
       "datasourceTemplate": "github-releases",
       "lookupNameTemplate": "rust-lang/rust",
       "depNameTemplate": "rust"
+    },
+    {
+      "fileMatch": ["^.github/workflows/build.yaml$"],
+      "matchStrings": [
+        "version: (?<currentValue>[0-9.]+) # renovate: zig-version"
+      ],
+      "datasourceTemplate": "github-tags",
+      "lookupNameTemplate": "ziglang/zig",
+      "depNameTemplate": "zig"
     }
   ]
 }

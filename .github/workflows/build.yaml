@@ -19,7 +19,7 @@ jobs:
       - name: Setup Zig
         uses: goto-bus-stop/setup-zig@869a4299cf8ac7db4ebffaec36ad82a682f88acb # renovate: tag=v2.0.1
         with:
-          version: 0.10.1
+          version: 0.10.1 # renovate: zig-version
 
       - name: Install cargo-zigbuild
         run: |
