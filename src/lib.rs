@@ -56,7 +56,7 @@ struct JsonGroup {
     name: String,
     passwd: Option<String>,
     gid: u32,
-    members: Vec<String>,
+    members: Option<Vec<String>>,
 }
 
 impl JsonGroup {
@@ -65,7 +65,7 @@ impl JsonGroup {
             name: self.name,
             passwd: self.passwd.unwrap_or("*".to_string()),
             gid: self.gid,
-            members: self.members,
+            members: self.members.unwrap_or_default(),
         }
     }
 }
@@ -85,7 +85,7 @@ fn load_groups() -> Result<Vec<JsonGroup>, Box<dyn Error>> {
                 name: u.name.clone(),
                 passwd: None,
                 gid: u.uid,
-                members: vec![u.name],
+                members: None,
             }),
     );
 

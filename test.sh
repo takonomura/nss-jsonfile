@@ -66,7 +66,7 @@ test_case \
 test_case \
   "Get auto-created group for testuser1" \
   "getent -s jsonfile group testuser1" \
-  "testuser1:*:2001:testuser1"
+  "testuser1:*:2001:"
 
 test_case \
   "Get non-existent group for testuser2" \

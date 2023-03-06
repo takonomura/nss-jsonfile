@@ -1,8 +1,7 @@
 [
   {
     "gid": 9999,
-    "name": "testgroup1",
-    "members": []
+    "name": "testgroup1"
   },
   {
     "gid": 9998,
