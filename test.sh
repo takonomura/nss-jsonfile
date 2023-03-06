@@ -91,7 +91,7 @@ test_case \
 test_case \
   "Get groups for testuser1" \
   "getent -s jsonfile initgroups testuser1" \
-  "testuser1             9999"
+  "testuser1             9998 9999"
 
 test_case \
   "Get groups for testuser2" \

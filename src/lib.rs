@@ -168,6 +168,15 @@ libnss_initgroups_hooks!(jsonfile, JsonFileInitgroups);
 
 impl InitgroupsHooks for JsonFileInitgroups {
     fn get_entries_by_user(name: String) -> Response<Vec<Group>> {
+        let v = match load_groups() {
+            Err(_) => return Response::Unavail,
+            Ok(v) => v,
+        };
+        let groups_by_members = v
+            .into_iter()
+            .filter(|g| g.members.as_ref().filter(|m| m.contains(&name)).is_some())
+            .map(|g| g.to_nss());
+
         let passwd = match load_passwd() {
             Err(_) => return Response::Unavail,
             Ok(v) => v,
@@ -176,19 +185,14 @@ impl InitgroupsHooks for JsonFileInitgroups {
             None => return Response::Success(vec![]),
             Some(u) => u,
         };
-        let groups = u
-            .groups
-            .unwrap_or_default()
-            .into_iter()
-            .map(|gid| Group {
-                gid: gid,
-                // Following fields is not used in initgroups
-                name: "".to_string(),
-                passwd: "".to_string(),
-                members: vec![],
-            })
-            .collect();
+        let groups_by_passwd = u.groups.unwrap_or_default().into_iter().map(|gid| Group {
+            gid: gid,
+            // Following fields is not used in initgroups
+            name: "".to_string(),
+            passwd: "".to_string(),
+            members: vec![],
+        });
 
-        Response::Success(groups)
+        Response::Success(groups_by_members.chain(groups_by_passwd).collect())
     }
 }
