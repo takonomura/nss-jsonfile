@@ -3,6 +3,7 @@
   "extends": [
     "config:base"
   ],
+  "automergeStrategy": "merge-commit",
   "platformAutomerge": true,
   "packageRules": [
     {
