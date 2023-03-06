@@ -26,7 +26,7 @@ struct JsonPasswd {
 }
 
 impl JsonPasswd {
-    pub fn to_nss(self) -> Passwd {
+    pub fn into_nss(self) -> Passwd {
         Passwd {
             name: self.name,
             passwd: self.passwd.unwrap_or("*".to_string()),
@@ -60,7 +60,7 @@ struct JsonGroup {
 }
 
 impl JsonGroup {
-    pub fn to_nss(self) -> Group {
+    pub fn into_nss(self) -> Group {
         Group {
             name: self.name,
             passwd: self.passwd.unwrap_or("*".to_string()),
@@ -101,7 +101,7 @@ impl PasswdHooks for JsonFilePasswd {
             Err(_) => return Response::Unavail,
             Ok(v) => v,
         };
-        let r = v.into_iter().map(|u| u.to_nss()).collect();
+        let r = v.into_iter().map(|u| u.into_nss()).collect();
         Response::Success(r)
     }
 
@@ -112,7 +112,7 @@ impl PasswdHooks for JsonFilePasswd {
         };
         match v.into_iter().find(|u| u.uid == uid) {
             None => Response::NotFound,
-            Some(u) => Response::Success(u.to_nss()),
+            Some(u) => Response::Success(u.into_nss()),
         }
     }
 
@@ -123,7 +123,7 @@ impl PasswdHooks for JsonFilePasswd {
         };
         match v.into_iter().find(|u| u.name == name) {
             None => Response::NotFound,
-            Some(u) => Response::Success(u.to_nss()),
+            Some(u) => Response::Success(u.into_nss()),
         }
     }
 }
@@ -137,7 +137,7 @@ impl GroupHooks for JsonFileGroup {
             Err(_) => return Response::Unavail,
             Ok(v) => v,
         };
-        let r = v.into_iter().map(|g| g.to_nss()).collect();
+        let r = v.into_iter().map(|g| g.into_nss()).collect();
         Response::Success(r)
     }
 
@@ -148,7 +148,7 @@ impl GroupHooks for JsonFileGroup {
         };
         match v.into_iter().find(|g| g.gid == gid) {
             None => Response::NotFound,
-            Some(g) => Response::Success(g.to_nss()),
+            Some(g) => Response::Success(g.into_nss()),
         }
     }
 
@@ -159,7 +159,7 @@ impl GroupHooks for JsonFileGroup {
         };
         match v.into_iter().find(|g| g.name == name) {
             None => Response::NotFound,
-            Some(g) => Response::Success(g.to_nss()),
+            Some(g) => Response::Success(g.into_nss()),
         }
     }
 }
@@ -175,7 +175,7 @@ impl InitgroupsHooks for JsonFileInitgroups {
         let groups_by_members = v
             .into_iter()
             .filter(|g| g.members.as_ref().filter(|m| m.contains(&name)).is_some())
-            .map(|g| g.to_nss());
+            .map(|g| g.into_nss());
 
         let passwd = match load_passwd() {
             Err(_) => return Response::Unavail,
@@ -186,7 +186,7 @@ impl InitgroupsHooks for JsonFileInitgroups {
             Some(u) => u,
         };
         let groups_by_passwd = u.groups.unwrap_or_default().into_iter().map(|gid| Group {
-            gid: gid,
+            gid,
             // Following fields is not used in initgroups
             name: "".to_string(),
             passwd: "".to_string(),
