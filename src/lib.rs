@@ -186,7 +186,7 @@ impl InitgroupsHooks for JsonFileInitgroups {
             Some(u) => u,
         };
         let groups_by_passwd = u.groups.unwrap_or_default().into_iter().map(|gid| Group {
-            gid: gid,
+            gid,
             // Following fields is not used in initgroups
             name: "".to_string(),
             passwd: "".to_string(),
