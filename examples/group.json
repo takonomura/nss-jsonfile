@@ -1,0 +1,13 @@
+[
+  {
+    "gid": 9999,
+    "name": "testgroup1",
+    "members": []
+  },
+  {
+    "gid": 9998,
+    "name": "testgroup2",
+    "passwd": "",
+    "members": ["testuser1"]
+  }
+]

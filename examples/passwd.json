@@ -1,0 +1,18 @@
+[
+  {
+    "uid": 2001,
+    "name": "testuser1",
+    "dir": "/home/testuser",
+    "shell": "/bin/bash",
+    "groups": [9999]
+  },
+  {
+    "uid": 2002,
+    "gid": 9999,
+    "name": "testuser2",
+    "passwd": "",
+    "gecos": "test user",
+    "dir": "/home/testuser2",
+    "shell": "/bin/bash"
+  }
+]

@@ -21,7 +21,7 @@
       "depNameTemplate": "rust"
     },
     {
-      "fileMatch": ["^.github/workflows/build.yaml$"],
+      "fileMatch": ["^.github/workflows/.+\\.yaml$"],
       "matchStrings": [
         "version: (?<currentValue>[0-9.]+) # renovate: zig-version"
       ],
@@ -30,7 +30,7 @@
       "depNameTemplate": "zig"
     },
     {
-      "fileMatch": ["^.github/workflows/build.yaml$"],
+      "fileMatch": ["^.github/workflows/.+\\.yaml$"],
       "matchStrings": [
         "CARGO_ZIGBUILD_VERSION=(?<currentValue>v[0-9.]+)"
       ],
