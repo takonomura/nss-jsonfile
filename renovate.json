@@ -11,6 +11,9 @@
       "automerge": true
     }
   ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "regexManagers": [
     {
       "fileMatch": ["^rust-toolchain$"],
