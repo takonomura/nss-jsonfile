@@ -65,7 +65,7 @@ jobs:
         uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
 
       - name: Setup Zig
-        uses: goto-bus-stop/setup-zig@869a4299cf8ac7db4ebffaec36ad82a682f88acb # v2.0.1
+        uses: goto-bus-stop/setup-zig@e24fd328aafb4ef918860ddf2c3ba97547246c60 # v2.0.2
         with:
           version: 0.10.1 # renovate: zig-version
 
