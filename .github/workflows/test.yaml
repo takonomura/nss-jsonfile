@@ -127,7 +127,7 @@ jobs:
           expected="testuser1:*:2001:2001::/home/testuser:/bin/bash"
           result="$(docker run --rm \
             --volume "$PWD/examples/passwd.json":/etc/passwd.json:ro \
-            --volume "$TARGET":/lib/aarch64-linux-gnu/libnss_jsonfile.so.2:ro \
+            --volume "$PWD/target/aarch64-unknown-linux-gnu/release/libnss_jsonfile.so":/lib/aarch64-linux-gnu/libnss_jsonfile.so.2:ro \
             --platform linux/arm64 \
             docker.io/library/debian:buster \
             getent -s jsonfile passwd testuser1)"
