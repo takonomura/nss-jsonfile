@@ -12,7 +12,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 lazy_static = "1.4.0"
-libc = "0.2.148"
+libc = "0.2.149"
 # Use master branch to use initgroups features
 libnss = { git = "https://github.com/csnewman/libnss-rs" }
 paste = "1.0.14"
