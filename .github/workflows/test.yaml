@@ -65,7 +65,7 @@ jobs:
         uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
 
       - name: Setup Zig
-        uses: goto-bus-stop/setup-zig@6fede2f0550d71291c0accf2834b216e69a2d67a # v2.1.1
+        uses: goto-bus-stop/setup-zig@7ab2955eb728f5440978d5824358023be3a2802d # v2.2.0
         with:
           version: 0.11.0 # renovate: zig-version
 
@@ -99,7 +99,7 @@ jobs:
           target: aarch64-unknown-linux-gnu
 
       - name: Setup Zig
-        uses: goto-bus-stop/setup-zig@6fede2f0550d71291c0accf2834b216e69a2d67a # v2.1.1
+        uses: goto-bus-stop/setup-zig@7ab2955eb728f5440978d5824358023be3a2802d # v2.2.0
         with:
           version: 0.11.0 # renovate: zig-version
 
