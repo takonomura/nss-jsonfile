@@ -17,9 +17,9 @@
   },
   "regexManagers": [
     {
-      "fileMatch": ["^rust-toolchain$"],
+      "fileMatch": ["^rust-toolchain\\.toml$"],
       "matchStrings": [
-        "(?<currentValue>[0-9.]+)"
+        "channel\\s*=\\s*\"(?<currentValue>[0-9.]+)\""
       ],
       "datasourceTemplate": "github-releases",
       "lookupNameTemplate": "rust-lang/rust",

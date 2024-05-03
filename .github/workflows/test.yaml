@@ -13,13 +13,10 @@ jobs:
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Setup Rust
-        uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
+        run: rustup show
 
       - name: cargo check
-        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # v1.0.3
-        with:
-          command: check
-          args: --all-features
+        run: cargo check --all-features
 
   clippy:
     runs-on: ubuntu-latest
@@ -28,15 +25,10 @@ jobs:
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Setup Rust
-        uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
-        with:
-          components: clippy
+        run: rustup show
 
       - name: cargo clippy
-        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # v1.0.3
-        with:
-          command: clippy
-          args: --all-features
+        run: cargo clippy --all-features
 
   rustfmt:
     runs-on: ubuntu-latest
@@ -45,15 +37,10 @@ jobs:
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Setup Rust
-        uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
-        with:
-          components: rustfmt
+        run: rustup show
 
       - name: cargo fmt
-        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # v1.0.3
-        with:
-          command: fmt
-          args: --all --check
+        run: cargo fmt --all --check
 
   e2e:
     runs-on: ubuntu-latest
@@ -62,7 +49,7 @@ jobs:
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Setup Rust
-        uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
+        run: rustup show
 
       - name: Setup Zig
         uses: goto-bus-stop/setup-zig@7ab2955eb728f5440978d5824358023be3a2802d # v2.2.0
@@ -78,10 +65,7 @@ jobs:
           rm "cargo-zigbuild-${CARGO_ZIGBUILD_VERSION}.x86_64-unknown-linux-musl.tar.gz"
 
       - name: Build
-        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # v1.0.3
-        with:
-          command: zigbuild
-          args: --target x86_64-unknown-linux-gnu.2.17 --release
+        run: cargo zigbuild --target x86_64-unknown-linux-gnu.2.17 --release
 
       - name: Test
         run: |
@@ -94,9 +78,7 @@ jobs:
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Setup Rust
-        uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
-        with:
-          target: aarch64-unknown-linux-gnu
+        run: rustup show
 
       - name: Setup Zig
         uses: goto-bus-stop/setup-zig@7ab2955eb728f5440978d5824358023be3a2802d # v2.2.0
@@ -112,10 +94,7 @@ jobs:
           rm "cargo-zigbuild-${CARGO_ZIGBUILD_VERSION}.x86_64-unknown-linux-musl.tar.gz"
 
       - name: Build
-        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # v1.0.3
-        with:
-          command: zigbuild
-          args: --target aarch64-unknown-linux-gnu.2.17 --release
+        run: cargo zigbuild --target aarch64-unknown-linux-gnu.2.17 --release
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
