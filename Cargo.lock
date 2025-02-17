@@ -22,8 +22,8 @@ checksum = "b5aba8db14291edd000dfcc4d620c7ebfb122c613afb886ca8803fa4e128a20a"
 
 [[package]]
 name = "libnss"
-version = "0.8.0"
-source = "git+https://github.com/csnewman/libnss-rs#6ea5526c8455b3b3575abd4cc555696e497a04f8"
+version = "0.9.0"
+source = "git+https://github.com/csnewman/libnss-rs#fa4331174e71af1759c5ca76dce52c529fbcc343"
 dependencies = [
  "lazy_static",
  "libc",
