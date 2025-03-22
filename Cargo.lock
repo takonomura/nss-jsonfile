@@ -23,7 +23,8 @@ checksum = "c19937216e9d3aa9956d9bb8dfc0b0c8beb6058fc4f7a4dc4d850edf86a237d6"
 [[package]]
 name = "libnss"
 version = "0.9.0"
-source = "git+https://github.com/csnewman/libnss-rs#fa4331174e71af1759c5ca76dce52c529fbcc343"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e401ab1018ee75ca809cd81852c635f1f453d796fdd5398c14fbb5f322855eab"
 dependencies = [
  "lazy_static",
  "libc",
