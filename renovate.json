@@ -37,10 +37,10 @@
     {
       "fileMatch": ["^.github/workflows/.+\\.yaml$"],
       "matchStrings": [
-        "CARGO_ZIGBUILD_VERSION=(?<currentValue>v[0-9.]+)"
+        "CARGO_ZIGBUILD_VERSION=(?<currentValue>[0-9.]+)"
       ],
-      "datasourceTemplate": "github-releases",
-      "lookupNameTemplate": "rust-cross/cargo-zigbuild",
+      "datasourceTemplate": "crate",
+      "lookupNameTemplate": "cargo-zigbuild",
       "depNameTemplate": "cargo-zigbuild"
     }
   ]
