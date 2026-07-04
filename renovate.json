@@ -27,10 +27,14 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["/^.github/workflows/.+\\.yaml$/"],
-      "matchStrings": ["version: (?<currentValue>[0-9.]+) # renovate: zig-version"],
-      "datasourceTemplate": "github-tags",
-      "packageNameTemplate": "ziglang/zig",
-      "depNameTemplate": "zig"
+      "matchStrings": [
+        "(?<indentation>[ \\t]*)ZIG_VERSION=(?<currentValue>[0-9.]+)\\n[ \\t]*ZIG_SHA256=(?<currentDigest>[a-f0-9]{64})"
+      ],
+      "datasourceTemplate": "custom.zig",
+      "packageNameTemplate": "zig",
+      "depNameTemplate": "zig",
+      "versioningTemplate": "semver-coerced",
+      "autoReplaceStringTemplate": "{{{indentation}}}ZIG_VERSION={{{newValue}}}\n{{{indentation}}}ZIG_SHA256={{{newDigest}}}"
     },
     {
       "customType": "regex",
@@ -40,5 +44,14 @@
       "packageNameTemplate": "cargo-zigbuild",
       "depNameTemplate": "cargo-zigbuild"
     }
-  ]
+  ],
+  "customDatasources": {
+    "zig": {
+      "defaultRegistryUrlTemplate": "https://ziglang.org/download/index.json",
+      "format": "json",
+      "transformTemplates": [
+        "{\"releases\": $each($sift($, function($release, $version) { $exists($release.\"x86_64-linux\".shasum) and $match($version, /^[0-9]+\\.[0-9]+\\.[0-9]+$/) }), function($release, $version) { {\"version\": $version, \"digest\": $release.\"x86_64-linux\".shasum, \"sourceUrl\": \"https://ziglang.org/download/\" & $version & \"/\"} })}"
+      ]
+    }
+  }
 }
