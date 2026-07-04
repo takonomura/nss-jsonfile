@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "automergeStrategy": "merge-commit",
   "platformAutomerge": true,
@@ -15,32 +15,29 @@
     "enabled": true,
     "automerge": true
   },
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["^rust-toolchain\\.toml$"],
-      "matchStrings": [
-        "channel\\s*=\\s*\"(?<currentValue>[0-9.]+)\""
-      ],
+      "customType": "regex",
+      "managerFilePatterns": ["/^rust-toolchain\\.toml$/"],
+      "matchStrings": ["channel\\s*=\\s*\"(?<currentValue>[0-9.]+)\""],
       "datasourceTemplate": "github-releases",
-      "lookupNameTemplate": "rust-lang/rust",
+      "packageNameTemplate": "rust-lang/rust",
       "depNameTemplate": "rust"
     },
     {
-      "fileMatch": ["^.github/workflows/.+\\.yaml$"],
-      "matchStrings": [
-        "version: (?<currentValue>[0-9.]+) # renovate: zig-version"
-      ],
+      "customType": "regex",
+      "managerFilePatterns": ["/^.github/workflows/.+\\.yaml$/"],
+      "matchStrings": ["version: (?<currentValue>[0-9.]+) # renovate: zig-version"],
       "datasourceTemplate": "github-tags",
-      "lookupNameTemplate": "ziglang/zig",
+      "packageNameTemplate": "ziglang/zig",
       "depNameTemplate": "zig"
     },
     {
-      "fileMatch": ["^.github/workflows/.+\\.yaml$"],
-      "matchStrings": [
-        "CARGO_ZIGBUILD_VERSION=(?<currentValue>[0-9.]+)"
-      ],
+      "customType": "regex",
+      "managerFilePatterns": ["/^.github/workflows/.+\\.yaml$/"],
+      "matchStrings": ["CARGO_ZIGBUILD_VERSION=(?<currentValue>[0-9.]+)"],
       "datasourceTemplate": "crate",
-      "lookupNameTemplate": "cargo-zigbuild",
+      "packageNameTemplate": "cargo-zigbuild",
       "depNameTemplate": "cargo-zigbuild"
     }
   ]
