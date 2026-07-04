@@ -24,7 +24,7 @@ jobs:
 
       - name: Install cargo-zigbuild
         run: |
-          CARGO_ZIGBUILD_VERSION=0.21.4
+          CARGO_ZIGBUILD_VERSION=0.23.0
           cargo install --locked --version "${CARGO_ZIGBUILD_VERSION}" cargo-zigbuild
 
       - name: Build
