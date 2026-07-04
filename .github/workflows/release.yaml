@@ -54,7 +54,8 @@ jobs:
         run: |
           gh release create "${GITHUB_REF_NAME}" \
             --verify-tag \
+            --draft \
+            --generate-notes \
             --title "${GITHUB_REF_NAME}" \
-            --notes "" \
             target/x86_64-unknown-linux-gnu/release/libnss_jsonfile.so \
             target/aarch64-unknown-linux-gnu/release/libnss_jsonfile-aarch64.so
