@@ -11,7 +11,7 @@ name = "nss_jsonfile"
 crate-type = ["cdylib"]
 
 [dependencies]
-libc = "=0.2.188"
+libc = "=0.2.189"
 libnss = "=0.9.0"
 paste = "=1.0.15"
 serde = { version = "=1.0.229", features = ["derive"] }
